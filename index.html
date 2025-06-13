@@ -37,6 +37,16 @@
         .tip-card:hover {
             transform: scale(1.03);
         }
+        .nav-active, .nav-active:focus {
+            color: #fff !important;
+            background: #ffb347 !important;
+            font-weight: bold;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 8px #ffb34733;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            transition: background 0.2s;
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-sans">
@@ -45,12 +55,12 @@
       <div class="max-w-6xl mx-auto flex justify-between items-center px-4 py-3">
         <span class="font-bold text-blue-600 text-xl">Razi English Learning</span>
         <div class="space-x-6">
-          <a href="#hero" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
-          <a href="#introduction" class="text-gray-700 hover:text-blue-600 font-medium">Introduction</a>
-          <a href="#levels" class="text-gray-700 hover:text-blue-600 font-medium">Levels</a>
-          <a href="#tips" class="text-gray-700 hover:text-blue-600 font-medium">Tips</a>
-          <a href="#cta" class="text-gray-700 hover:text-blue-600 font-medium">Get Started</a>
-          <a href="#footer" class="text-gray-700 hover:text-blue-600 font-medium">Contact</a>
+          <a href="#hero" id="nav-hero" class="text-gray-700 hover:text-blue-600 font-medium">Home</a>
+          <a href="#introduction" id="nav-introduction" class="text-gray-700 hover:text-blue-600 font-medium">Introduction</a>
+          <a href="#levels" id="nav-levels" class="text-gray-700 hover:text-blue-600 font-medium">Levels</a>
+          <a href="#tips" id="nav-tips" class="text-gray-700 hover:text-blue-600 font-medium">Tips</a>
+          <a href="#cta" id="nav-cta" class="text-gray-700 hover:text-blue-600 font-medium">Get Started</a>
+          <a href="#footer" id="nav-footer" class="text-gray-700 hover:text-blue-600 font-medium">Contact</a>
           <a href="Activities for ESL_EFL Students (English Study).html" class="text-gray-700 hover:text-blue-600 font-medium" target="_blank">ESL Activities</a>
           <a href="Learn beginner A1 English in 30 days for FREE_ self-paced course.html" class="text-gray-700 hover:text-blue-600 font-medium" target="_blank">A1 English 30 Days</a>
           <a href="Voice of America - Learn American English with VOA Learning English.html" class="text-gray-700 hover:text-blue-600 font-medium" target="_blank">VOA Learning English</a>
@@ -585,6 +595,36 @@
             localStorage.setItem('daily-progress', JSON.stringify(progress));
             alert('Progress saved for today!');
         }
+
+        const sectionIds = ['hero', 'introduction', 'levels', 'tips', 'cta', 'footer'];
+        const navLinks = sectionIds.map(id => document.getElementById('nav-' + id));
+
+        function onScrollHighlightNav() {
+            let scrollPos = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop;
+            let found = false;
+            for (let i = sectionIds.length - 1; i >= 0; i--) {
+                const section = document.getElementById(sectionIds[i]);
+                if (section && section.offsetTop <= scrollPos + 120) {
+                    navLinks.forEach(link => link && link.classList.remove('nav-active'));
+                    if (navLinks[i]) navLinks[i].classList.add('nav-active');
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) navLinks.forEach(link => link && link.classList.remove('nav-active'));
+        }
+        window.addEventListener('scroll', onScrollHighlightNav);
+        onScrollHighlightNav();
+
+        // Also highlight on click (for instant feedback)
+        navLinks.forEach(link => {
+            if (link) {
+                link.addEventListener('click', function() {
+                    navLinks.forEach(l => l && l.classList.remove('nav-active'));
+                    link.classList.add('nav-active');
+                });
+            }
+        });
     </script>
 </body>
 </html>
